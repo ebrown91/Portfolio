@@ -1,0 +1,43 @@
+---
+title: "Surgical Smoke Removal in Laparoscopic Video"
+description: "A domain adaptation study testing whether a CNN built for outdoor haze removal transfers to surgical smoke"
+date: 2026-08-08
+categories: [computer vision, deep learning, domain adaptation]
+---
+
+## Overview
+
+Investigated the transferability of AOD-Net, a CNN originally designed for
+outdoor atmospheric haze removal, to surgical smoke removal on real paired
+laparoscopic footage from the DesmokeData dataset (MICCAI 2024).
+
+## Approach
+
+Designed and implemented a full evaluation protocol — PSNR and SSIM on
+held-out validation data — benchmarked against published dehazing baselines,
+to test whether a model trained on a visually similar but physically
+different problem (outdoor haze vs. surgical smoke) generalizes without
+retraining.
+
+## Key Finding
+| Smoke density | N | Mean PSNR | Mean SSIM |
+|---|---|---|---|
+| Low | 32 | 22.99 dB | 0.8088 |
+| Medium | 31 | 22.31 dB | 0.7751 |
+| High | 33 | 16.52 dB | 0.6346 |
+
+A density-stratified analysis revealed a systematic ~6.5 dB PSNR performance
+gap between light and dense smoke conditions — smoke density itself is a
+confound the base architecture doesn't account for, not just a difficulty
+gradient it handles gracefully.
+
+![Before/after smoke removal comparision along with ground truth](validation-comparison-grid.png)
+
+## Implications
+
+The results point to two concrete next steps for improving robustness in
+surgical desmoking: increasing architecture capacity and using
+density-aware training strategies, rather than assuming a haze-removal
+model transfers as-is.
+
+[View on GitHub](https://github.com/ebrown91/Surgical-Smoke-Removal-in-Laparoscopic-Video-AOD-Net-)

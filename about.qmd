@@ -1,0 +1,63 @@
+---
+title: "Ari Brown"
+image: files/profile.png
+about:
+  template: trestles
+  image-shape: rounded
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/ari-brown-803171106/
+    - icon: github
+      text: GitHub
+      href: https://github.com/ebrown91
+    - icon: envelope
+      text: Email
+      href: mailto:eebrown91@gmail.com
+    - icon: file-earmark-pdf
+      text: Resume
+      href: files/AriBrown_Resume_clean.pdf
+---
+
+Research Engineer with a background spanning materials science, mechanical
+systems, and applied machine learning. I hold an MS in Materials Science and
+Engineering from Louisiana State University and a BS in Mechanical
+Engineering from Southeastern Louisiana University, and I've spent my career
+at the intersection of experimental design, materials characterization, and
+the software that makes test data actually usable.
+
+Outside of my day-to-day work, I'm teaching myself machine learning through
+independent projects — mostly time-series anomaly detection and computer
+vision applied to problems I find genuinely interesting, from industrial
+predictive maintenance to surgical video analysis.
+
+## Experience
+
+**Research Engineer III** — ConMed Advanced Surgical *(Nov 2021 – Oct 2025)*
+Led experimental design and execution for new surgical technologies,
+including hydrophobic coating development for electrodes. Owned test
+protocols and Design History File documentation under a formal Quality
+Management System, and built a Python-based topic-modeling tool to turn
+open-ended Voice-of-Customer survey data into structured design inputs.
+
+**Mechanical Design Engineer & R&D Specialist** — Benoit Premium Threading
+*(Nov 2019 – Nov 2021)*
+Designed and executed corrosion and coating studies for oil and gas tubular
+goods, and used FEA (COMSOL) to predict material failure during plastic
+deformation.
+
+## Education
+
+**MS, Materials Science and Engineering** — Louisiana State University, 2018
+Research assistant modeling pool boiling via level-set methods; fabricated
+super-hydrophobic substrates for condensation experiments using thermal
+imprinting and self-assembly monolayers. Taught heat treatment, alloy
+hardening, and SEM concepts as a teaching assistant.
+
+**BS, Mechanical Engineering** — Southeastern Louisiana University, 2014
+
+## Publication
+
+Ok, J., Choi, J., Brown, E., & Park, S. (2016). Effects of different fluids
+on rectified motion of Leidenfrost droplets on micro/submicron ratchets.
+*Microelectronic Engineering*, Elsevier.
