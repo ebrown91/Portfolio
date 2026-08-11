@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "projects/surgical-smoke-removal/index.html",
+    "href": "projects/surgical-smoke-removal/index.html",
+    "title": "Surgical Smoke Removal in Laparoscopic Video",
+    "section": "",
+    "text": "Investigated the transferability of AOD-Net, a CNN originally designed for outdoor atmospheric haze removal, to surgical smoke removal on real paired laparoscopic footage from the DesmokeData dataset (MICCAI 2024)."
+  },
+  {
+    "objectID": "projects/surgical-smoke-removal/index.html#overview",
+    "href": "projects/surgical-smoke-removal/index.html#overview",
+    "title": "Surgical Smoke Removal in Laparoscopic Video",
+    "section": "",
+    "text": "Investigated the transferability of AOD-Net, a CNN originally designed for outdoor atmospheric haze removal, to surgical smoke removal on real paired laparoscopic footage from the DesmokeData dataset (MICCAI 2024)."
+  },
+  {
+    "objectID": "projects/surgical-smoke-removal/index.html#approach",
+    "href": "projects/surgical-smoke-removal/index.html#approach",
+    "title": "Surgical Smoke Removal in Laparoscopic Video",
+    "section": "Approach",
+    "text": "Approach\nDesigned and implemented a full evaluation protocol — PSNR and SSIM on held-out validation data — benchmarked against published dehazing baselines, to test whether a model trained on a visually similar but physically different problem (outdoor haze vs. surgical smoke) generalizes without retraining."
+  },
+  {
+    "objectID": "projects/surgical-smoke-removal/index.html#key-finding",
+    "href": "projects/surgical-smoke-removal/index.html#key-finding",
+    "title": "Surgical Smoke Removal in Laparoscopic Video",
+    "section": "Key Finding",
+    "text": "Key Finding\n\n\n\nSmoke density\nN\nMean PSNR\nMean SSIM\n\n\n\n\nLow\n32\n22.99 dB\n0.8088\n\n\nMedium\n31\n22.31 dB\n0.7751\n\n\nHigh\n33\n16.52 dB\n0.6346\n\n\n\nA density-stratified analysis revealed a systematic ~6.5 dB PSNR performance gap between light and dense smoke conditions — smoke density itself is a confound the base architecture doesn’t account for, not just a difficulty gradient it handles gracefully.\n\n\n\nBefore/after smoke removal comparision along with ground truth"
+  },
+  {
+    "objectID": "projects/surgical-smoke-removal/index.html#implications",
+    "href": "projects/surgical-smoke-removal/index.html#implications",
+    "title": "Surgical Smoke Removal in Laparoscopic Video",
+    "section": "Implications",
+    "text": "Implications\nThe results point to two concrete next steps for improving robustness in surgical desmoking: increasing architecture capacity and using density-aware training strategies, rather than assuming a haze-removal model transfers as-is.\nView on GitHub"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Ari Brown",
+    "section": "",
+    "text": "Research Engineer with a background spanning materials science, mechanical systems, and applied machine learning. I hold an MS in Materials Science and Engineering from Louisiana State University and a BS in Mechanical Engineering from Southeastern Louisiana University, and I’ve spent my career at the intersection of experimental design, materials characterization, and the software that makes test data actually usable.\nOutside of my day-to-day work, I’m teaching myself machine learning through independent projects — mostly time-series anomaly detection and computer vision applied to problems I find genuinely interesting, from industrial predictive maintenance to surgical video analysis."
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "Ari Brown",
+    "section": "Experience",
+    "text": "Experience\nResearch Engineer III — ConMed Advanced Surgical (Nov 2021 – Oct 2025) Led experimental design and execution for new surgical technologies, including hydrophobic coating development for electrodes. Owned test protocols and Design History File documentation under a formal Quality Management System, and built a Python-based topic-modeling tool to turn open-ended Voice-of-Customer survey data into structured design inputs.\nMechanical Design Engineer & R&D Specialist — Benoit Premium Threading (Nov 2019 – Nov 2021) Designed and executed corrosion and coating studies for oil and gas tubular goods, and used FEA (COMSOL) to predict material failure during plastic deformation."
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Ari Brown",
+    "section": "Education",
+    "text": "Education\nMS, Materials Science and Engineering — Louisiana State University, 2018 Research assistant modeling pool boiling via level-set methods; fabricated super-hydrophobic substrates for condensation experiments using thermal imprinting and self-assembly monolayers. Taught heat treatment, alloy hardening, and SEM concepts as a teaching assistant.\nBS, Mechanical Engineering — Southeastern Louisiana University, 2014"
+  },
+  {
+    "objectID": "about.html#publication",
+    "href": "about.html#publication",
+    "title": "Ari Brown",
+    "section": "Publication",
+    "text": "Publication\nOk, J., Choi, J., Brown, E., & Park, S. (2016). Effects of different fluids on rectified motion of Leidenfrost droplets on micro/submicron ratchets. Microelectronic Engineering, Elsevier."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ari Brown",
+    "section": "",
+    "text": "Surgical Smoke Removal in Laparoscopic Video\n\n\nA domain adaptation study testing whether a CNN built for outdoor haze removal transfers to surgical smoke\n\n\n\nAug 8, 2026\n\n\n\n\n\n\nNo matching items"
+  }
+]
