@@ -16,7 +16,7 @@ about:
       href: mailto:eebrown91@gmail.com
     - icon: file-earmark-pdf
       text: Resume
-      href: files/AriBrown_Resume_clean.pdf
+      href: https://ebrown91.github.io/Portfolio/files/AriBrown_Resume_clean.pdf
 ---
 
 Research Engineer with a background spanning materials science, mechanical
