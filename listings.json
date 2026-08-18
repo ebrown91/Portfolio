@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/projects/predictive-maintenance/index.html",
       "/projects/materials-toolbox/index.html",
       "/projects/surgical-smoke-removal/index.html"
     ]
