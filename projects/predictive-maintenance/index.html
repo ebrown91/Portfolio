@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-08-18">
-<meta name="description" content="Machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset.">
 
-<title>Predictive Maintenance – Portfolio</title>
+<title>Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data – Portfolio</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -121,7 +119,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#predictive-maintenance-for-industrial-water-pump" id="toc-predictive-maintenance-for-industrial-water-pump" class="nav-link active" data-scroll-target="#predictive-maintenance-for-industrial-water-pump">Predictive Maintenance for Industrial Water Pump</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#problem" id="toc-problem" class="nav-link" data-scroll-target="#problem">Problem</a></li>
+  <li><a href="#approach" id="toc-approach" class="nav-link" data-scroll-target="#approach">Approach</a></li>
+  <li><a href="#methodology-highlights" id="toc-methodology-highlights" class="nav-link" data-scroll-target="#methodology-highlights">Methodology highlights</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#live-demo" id="toc-live-demo" class="nav-link" data-scroll-target="#live-demo">Live demo</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s next</a></li>
   </ul>
 </nav>
     </div>
@@ -130,33 +134,21 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Predictive Maintenance</h1>
+<h1 class="title">Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data</h1>
+<p class="subtitle lead">Isolation Forest anomaly detection with walk-forward validation, feature engineering, and ablation-based feature selection</p>
   <div class="quarto-categories">
-    <div class="quarto-category">Predictive maintenance</div>
-    <div class="quarto-category">anomaly detection</div>
-    <div class="quarto-category">time-series analysis</div>
-    <div class="quarto-category">feature engineering</div>
-    <div class="quarto-category">machine learning</div>
-    <div class="quarto-category">industrial IoT</div>
+    <div class="quarto-category">Machine Learning</div>
+    <div class="quarto-category">Time Series</div>
+    <div class="quarto-category">Anomaly Detection</div>
+    <div class="quarto-category">Python</div>
   </div>
   </div>
 
-<div>
-  <div class="description">
-    Machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset.
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 18, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -166,19 +158,85 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><strong>UNDER CONSTRUCTION</strong></p>
-<section id="predictive-maintenance-for-industrial-water-pump" class="level1">
-<h1>Predictive Maintenance for Industrial Water Pump</h1>
-<p>Developed a machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset to identify abnormal operating behavior and detect conditions associated with impending equipment failure. The project focuses on building a realistic preventative maintenance workflow from raw time-series sensor data rather than relying solely on classification accuracy.</p>
-<p>Key components include data quality analysis, sensor health assessment, temporal and mechanical feature engineering, failure-relevance ranking, and chronological walk-forward validation. An <strong>Isolation Forest</strong> anomaly-detection model is used to distinguish normal operation from recovering and failure-related behavior while avoiding random train/test splits that could introduce temporal leakage.</p>
-<p>The project also investigates contamination-rate selection, false-alarm burden, pre-failure detection, feature redundancy, and model stability across different operating periods. Results are evaluated using precision, recall, F1 score, PR-AUC, and false alarms per day, with an emphasis on whether the model could provide useful early warning signals for maintenance decisions.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>An end-to-end predictive maintenance pipeline that detects equipment failure using <strong>unsupervised anomaly detection</strong> on multivariate sensor data — no labeled failure examples used during training, only clean “normal operation” data. The project covers the full lifecycle: raw sensor data → feature engineering → model validation → rigorous methodology debugging → feature selection experiments → a live historical-replay dashboard.</p>
+<p><strong>Stack:</strong> Python, scikit-learn (Isolation Forest), pandas, Jupyter, Plotly/ipywidgets for the live dashboard.</p>
+</section>
+<section id="problem" class="level2">
+<h2 class="anchored" data-anchor-id="problem">Problem</h2>
+<p>Given a stream of ~40 sensor readings from an industrial pump system, predict impending failure early enough to act on it — using only examples of <em>normal</em> operation, since real failures are rare and expensive to label. The model needs to generalize across time: trained on the past, evaluated on the future, the way it would actually be deployed.</p>
+</section>
+<section id="approach" class="level2">
+<h2 class="anchored" data-anchor-id="approach">Approach</h2>
+<ul>
+<li><strong>Isolation Forest</strong>, trained exclusively on clean-baseline (normal) operation, flags future readings that don’t resemble it.</li>
+<li><strong>Walk-forward validation</strong> — chronological train/test splits, never trained on future data relative to what it’s evaluated against.</li>
+<li><strong>Engineered feature families</strong>: raw sensor readings (“core”), rolling mechanical features (velocity, amplitude, accumulated stress), and spectral features (FFT energy, dominant frequency, spectral entropy) — each tested standalone and in combination.</li>
+</ul>
+</section>
+<section id="methodology-highlights" class="level2">
+<h2 class="anchored" data-anchor-id="methodology-highlights">Methodology highlights</h2>
+<p>This project’s real emphasis is <strong>rigor over headline numbers</strong> — several rounds of discovering and correcting subtle methodology issues that would have otherwise produced misleading results:</p>
+<ul>
+<li><strong>Found and fixed a feature-selection bias</strong>: an AUC-based ranking was unintentionally selecting features that separated <em>post-failure recovery</em> behavior rather than <em>failure</em> behavior itself — features with near-perfect individual separation scores that produced a near-useless model once combined. Diagnosed by breaking AUC down per machine-state pair rather than trusting a single combined metric.</li>
+<li><strong>Found and fixed a feature-scale bug</strong>: an engineered “accumulated stress” feature was an unbounded rolling sum, sitting at a scale thousands of times larger than other features — silently dominating the model’s decision splits. Fixed by converting it to a scale-normalized rate.</li>
+<li><strong>Found and fixed a silent pipeline bug</strong>: a per-experiment contamination-rate tuning step had been computed but never actually wired into model training — every experiment was silently using a generic default. Confirmed via a direct before/after comparison once corrected.</li>
+<li><strong>Compared two feature-selection philosophies head-to-head</strong>: ranking features by individual statistical separation (AUC) vs.&nbsp;testing each feature’s actual marginal contribution to model performance (ablation). The ablation approach surfaced a real, validated precision/recall trade-off that the AUC approach never found.</li>
+</ul>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>The raw sensor readings (“core” features) turned out to be the strongest standalone predictor — engineered mechanical and spectral features did <strong>not</strong> reliably improve on this baseline, a genuine negative result reached only after four separate rounds of fixes and a second, independent feature-selection method, not an unexamined gap.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature set</th>
+<th>F1</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>Median warning time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Core (raw sensors)</strong></td>
+<td><strong>0.72</strong></td>
+<td>0.67</td>
+<td>0.80</td>
+<td>978 hrs (~41 days)</td>
+</tr>
+<tr class="even">
+<td>Ablation-selected (core + engineered)</td>
+<td>0.67</td>
+<td>0.58</td>
+<td>0.84</td>
+<td>1,171 hrs (~49 days)</td>
+</tr>
+</tbody>
+</table>
+<p>The two final candidates represent a genuine trade-off rather than one being strictly better: the ablation-selected set trades precision and a higher false-alarm rate for meaningfully earlier warning — about 8 additional days of lead time before failure. Which one is “correct” depends on the operational cost of a false alarm versus the value of earlier warning, a business question the model itself can’t answer.</p>
+</section>
+<section id="live-demo" class="level2">
+<h2 class="anchored" data-anchor-id="live-demo">Live demo</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="dashboard_v0.gif" class="img-fluid figure-img"></p>
 <figcaption>Dashboard Demo</figcaption>
 </figure>
 </div>
-<p><strong>Tools:</strong> Python, Pandas, NumPy, Scikit-learn, Matplotlib, Jupyter/Kaggle <strong>Focus:</strong> Predictive maintenance, anomaly detection, time-series analysis, feature engineering, machine learning, industrial IoT</p>
+<p>A historical-replay dashboard simulates real-time monitoring by streaming the historical dataset chronologically through the trained model — showing live anomaly scores, current machine status, and a running alert log, since no live sensor feed was available for this project.</p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s next</h2>
+<p>Converting the research notebooks into a reproducible <code>src/</code> pipeline, with a streaming inference simulation and basic edge-deployment resource profiling.</p>
 
 
 </section>

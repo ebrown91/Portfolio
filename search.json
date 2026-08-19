@@ -102,13 +102,62 @@
     "href": "index.html",
     "title": "Ari Brown",
     "section": "",
-    "text": "Predictive Maintenance\n\n\nMachine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset.\n\n\n\nAug 18, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaterials Science Toolbox\n\n\nA GUI toolbox for materials science, starting with an interactive binary phase diagram tool\n\n\n\nAug 11, 2026\n\n\n\n\n\n\n\n\n\n\n\nSurgical Smoke Removal in Laparoscopic Video\n\n\nA domain adaptation study testing whether a CNN built for outdoor haze removal transfers to surgical smoke\n\n\n\nAug 8, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaterials Science Toolbox\n\n\nA GUI toolbox for materials science, starting with an interactive binary phase diagram tool\n\n\n\nAug 11, 2026\n\n\n\n\n\n\n\n\n\n\n\nSurgical Smoke Removal in Laparoscopic Video\n\n\nA domain adaptation study testing whether a CNN built for outdoor haze removal transfers to surgical smoke\n\n\n\nAug 8, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/predictive-maintenance/index.html",
     "href": "projects/predictive-maintenance/index.html",
-    "title": "Predictive Maintenance",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
     "section": "",
-    "text": "UNDER CONSTRUCTION\n\nPredictive Maintenance for Industrial Water Pump\nDeveloped a machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset to identify abnormal operating behavior and detect conditions associated with impending equipment failure. The project focuses on building a realistic preventative maintenance workflow from raw time-series sensor data rather than relying solely on classification accuracy.\nKey components include data quality analysis, sensor health assessment, temporal and mechanical feature engineering, failure-relevance ranking, and chronological walk-forward validation. An Isolation Forest anomaly-detection model is used to distinguish normal operation from recovering and failure-related behavior while avoiding random train/test splits that could introduce temporal leakage.\nThe project also investigates contamination-rate selection, false-alarm burden, pre-failure detection, feature redundancy, and model stability across different operating periods. Results are evaluated using precision, recall, F1 score, PR-AUC, and false alarms per day, with an emphasis on whether the model could provide useful early warning signals for maintenance decisions.\n\n\n\nDashboard Demo\n\n\nTools: Python, Pandas, NumPy, Scikit-learn, Matplotlib, Jupyter/Kaggle Focus: Predictive maintenance, anomaly detection, time-series analysis, feature engineering, machine learning, industrial IoT"
+    "text": "An end-to-end predictive maintenance pipeline that detects equipment failure using unsupervised anomaly detection on multivariate sensor data — no labeled failure examples used during training, only clean “normal operation” data. The project covers the full lifecycle: raw sensor data → feature engineering → model validation → rigorous methodology debugging → feature selection experiments → a live historical-replay dashboard.\nStack: Python, scikit-learn (Isolation Forest), pandas, Jupyter, Plotly/ipywidgets for the live dashboard."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#overview",
+    "href": "projects/predictive-maintenance/index.html#overview",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "",
+    "text": "An end-to-end predictive maintenance pipeline that detects equipment failure using unsupervised anomaly detection on multivariate sensor data — no labeled failure examples used during training, only clean “normal operation” data. The project covers the full lifecycle: raw sensor data → feature engineering → model validation → rigorous methodology debugging → feature selection experiments → a live historical-replay dashboard.\nStack: Python, scikit-learn (Isolation Forest), pandas, Jupyter, Plotly/ipywidgets for the live dashboard."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#problem",
+    "href": "projects/predictive-maintenance/index.html#problem",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "Problem",
+    "text": "Problem\nGiven a stream of ~40 sensor readings from an industrial pump system, predict impending failure early enough to act on it — using only examples of normal operation, since real failures are rare and expensive to label. The model needs to generalize across time: trained on the past, evaluated on the future, the way it would actually be deployed."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#approach",
+    "href": "projects/predictive-maintenance/index.html#approach",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "Approach",
+    "text": "Approach\n\nIsolation Forest, trained exclusively on clean-baseline (normal) operation, flags future readings that don’t resemble it.\nWalk-forward validation — chronological train/test splits, never trained on future data relative to what it’s evaluated against.\nEngineered feature families: raw sensor readings (“core”), rolling mechanical features (velocity, amplitude, accumulated stress), and spectral features (FFT energy, dominant frequency, spectral entropy) — each tested standalone and in combination."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#methodology-highlights",
+    "href": "projects/predictive-maintenance/index.html#methodology-highlights",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "Methodology highlights",
+    "text": "Methodology highlights\nThis project’s real emphasis is rigor over headline numbers — several rounds of discovering and correcting subtle methodology issues that would have otherwise produced misleading results:\n\nFound and fixed a feature-selection bias: an AUC-based ranking was unintentionally selecting features that separated post-failure recovery behavior rather than failure behavior itself — features with near-perfect individual separation scores that produced a near-useless model once combined. Diagnosed by breaking AUC down per machine-state pair rather than trusting a single combined metric.\nFound and fixed a feature-scale bug: an engineered “accumulated stress” feature was an unbounded rolling sum, sitting at a scale thousands of times larger than other features — silently dominating the model’s decision splits. Fixed by converting it to a scale-normalized rate.\nFound and fixed a silent pipeline bug: a per-experiment contamination-rate tuning step had been computed but never actually wired into model training — every experiment was silently using a generic default. Confirmed via a direct before/after comparison once corrected.\nCompared two feature-selection philosophies head-to-head: ranking features by individual statistical separation (AUC) vs. testing each feature’s actual marginal contribution to model performance (ablation). The ablation approach surfaced a real, validated precision/recall trade-off that the AUC approach never found."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#results",
+    "href": "projects/predictive-maintenance/index.html#results",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "Results",
+    "text": "Results\nThe raw sensor readings (“core” features) turned out to be the strongest standalone predictor — engineered mechanical and spectral features did not reliably improve on this baseline, a genuine negative result reached only after four separate rounds of fixes and a second, independent feature-selection method, not an unexamined gap.\n\n\n\n\n\n\n\n\n\n\nFeature set\nF1\nPrecision\nRecall\nMedian warning time\n\n\n\n\nCore (raw sensors)\n0.72\n0.67\n0.80\n978 hrs (~41 days)\n\n\nAblation-selected (core + engineered)\n0.67\n0.58\n0.84\n1,171 hrs (~49 days)\n\n\n\nThe two final candidates represent a genuine trade-off rather than one being strictly better: the ablation-selected set trades precision and a higher false-alarm rate for meaningfully earlier warning — about 8 additional days of lead time before failure. Which one is “correct” depends on the operational cost of a false alarm versus the value of earlier warning, a business question the model itself can’t answer."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#live-demo",
+    "href": "projects/predictive-maintenance/index.html#live-demo",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "Live demo",
+    "text": "Live demo\n\n\n\nDashboard Demo\n\n\nA historical-replay dashboard simulates real-time monitoring by streaming the historical dataset chronologically through the trained model — showing live anomaly scores, current machine status, and a running alert log, since no live sensor feed was available for this project."
+  },
+  {
+    "objectID": "projects/predictive-maintenance/index.html#whats-next",
+    "href": "projects/predictive-maintenance/index.html#whats-next",
+    "title": "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data",
+    "section": "What’s next",
+    "text": "What’s next\nConverting the research notebooks into a reproducible src/ pipeline, with a streaming inference simulation and basic edge-deployment resource profiling."
   }
 ]
