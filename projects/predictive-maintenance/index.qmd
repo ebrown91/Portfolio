@@ -1,22 +1,106 @@
 ---
-title: "Predictive Maintenance"
-description: "Machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset."
-date: 2026-08-18
-categories: [Predictive maintenance, anomaly detection, time-series analysis, feature engineering, machine learning, industrial IoT]
+title: "Predictive Maintenance: Unsupervised Failure Detection on Industrial Sensor Data"
+subtitle: "Isolation Forest anomaly detection with walk-forward validation, feature engineering, and ablation-based feature selection"
+categories: [Machine Learning, Time Series, Anomaly Detection, Python]
 image: dashboard_v0.gif
 ---
 
-**UNDER CONSTRUCTION**
+## Overview
 
-# Predictive Maintenance for Industrial Water Pump
+An end-to-end predictive maintenance pipeline that detects equipment
+failure using **unsupervised anomaly detection** on multivariate
+sensor data — no labeled failure examples used during training, only
+clean "normal operation" data. The project covers the full lifecycle:
+raw sensor data → feature engineering → model validation → rigorous
+methodology debugging → feature selection experiments → a live
+historical-replay dashboard.
 
-Developed a machine-learning–based predictive maintenance pipeline using a publicly available industrial water pump dataset to identify abnormal operating behavior and detect conditions associated with impending equipment failure. The project focuses on building a realistic preventative maintenance workflow from raw time-series sensor data rather than relying solely on classification accuracy.
+**Stack:** Python, scikit-learn (Isolation Forest), pandas, Jupyter,
+Plotly/ipywidgets for the live dashboard.
 
-Key components include data quality analysis, sensor health assessment, temporal and mechanical feature engineering, failure-relevance ranking, and chronological walk-forward validation. An **Isolation Forest** anomaly-detection model is used to distinguish normal operation from recovering and failure-related behavior while avoiding random train/test splits that could introduce temporal leakage.
+## Problem
 
-The project also investigates contamination-rate selection, false-alarm burden, pre-failure detection, feature redundancy, and model stability across different operating periods. Results are evaluated using precision, recall, F1 score, PR-AUC, and false alarms per day, with an emphasis on whether the model could provide useful early warning signals for maintenance decisions.
+Given a stream of ~40 sensor readings from an industrial pump system,
+predict impending failure early enough to act on it — using only
+examples of *normal* operation, since real failures are rare and
+expensive to label. The model needs to generalize across time: trained
+on the past, evaluated on the future, the way it would actually be
+deployed.
+
+## Approach
+
+- **Isolation Forest**, trained exclusively on clean-baseline
+  (normal) operation, flags future readings that don't resemble it.
+- **Walk-forward validation** — chronological train/test splits, never
+  trained on future data relative to what it's evaluated against.
+- **Engineered feature families**: raw sensor readings ("core"),
+  rolling mechanical features (velocity, amplitude, accumulated
+  stress), and spectral features (FFT energy, dominant frequency,
+  spectral entropy) — each tested standalone and in combination.
+
+## Methodology highlights
+
+This project's real emphasis is **rigor over headline numbers** — several
+rounds of discovering and correcting subtle methodology issues that
+would have otherwise produced misleading results:
+
+- **Found and fixed a feature-selection bias**: an AUC-based ranking
+  was unintentionally selecting features that separated
+  *post-failure recovery* behavior rather than *failure* behavior
+  itself — features with near-perfect individual separation scores
+  that produced a near-useless model once combined. Diagnosed by
+  breaking AUC down per machine-state pair rather than trusting a
+  single combined metric.
+- **Found and fixed a feature-scale bug**: an engineered "accumulated
+  stress" feature was an unbounded rolling sum, sitting at a scale
+  thousands of times larger than other features — silently dominating
+  the model's decision splits. Fixed by converting it to a
+  scale-normalized rate.
+- **Found and fixed a silent pipeline bug**: a per-experiment
+  contamination-rate tuning step had been computed but never actually
+  wired into model training — every experiment was silently using a
+  generic default. Confirmed via a direct before/after comparison
+  once corrected.
+- **Compared two feature-selection philosophies head-to-head**: ranking
+  features by individual statistical separation (AUC) vs. testing each
+  feature's actual marginal contribution to model performance
+  (ablation). The ablation approach surfaced a real, validated
+  precision/recall trade-off that the AUC approach never found.
+
+## Results
+
+The raw sensor readings ("core" features) turned out to be the
+strongest standalone predictor — engineered mechanical and spectral
+features did **not** reliably improve on this baseline, a genuine
+negative result reached only after four separate rounds of fixes and
+a second, independent feature-selection method, not an unexamined gap.
+
+| Feature set | F1 | Precision | Recall | Median warning time |
+|---|---|---|---|---|
+| **Core (raw sensors)** | **0.72** | 0.67 | 0.80 | 978 hrs (~41 days) |
+| Ablation-selected (core + engineered) | 0.67 | 0.58 | 0.84 | 1,171 hrs (~49 days) |
+
+The two final candidates represent a genuine trade-off rather than one
+being strictly better: the ablation-selected set trades precision and
+a higher false-alarm rate for meaningfully earlier warning — about
+8 additional days of lead time before failure. Which one is "correct"
+depends on the operational cost of a false alarm versus the value of
+earlier warning, a business question the model itself can't answer.
+
+## Live demo
 
 ![Dashboard Demo](dashboard_v0.gif)
 
-**Tools:** Python, Pandas, NumPy, Scikit-learn, Matplotlib, Jupyter/Kaggle
-**Focus:** Predictive maintenance, anomaly detection, time-series analysis, feature engineering, machine learning, industrial IoT
+A historical-replay dashboard simulates real-time monitoring by
+streaming the historical dataset chronologically through the trained
+model — showing live anomaly scores, current machine status, and a
+running alert log, since no live sensor feed was available for this
+project.
+
+## What's next
+
+Converting the research notebooks into a reproducible `src/` pipeline,
+with a streaming inference simulation and basic edge-deployment
+resource profiling.
+
+
